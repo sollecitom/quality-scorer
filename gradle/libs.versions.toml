@@ -3,13 +3,19 @@ kotlin = "2.4.10"
 sollecitom-gradle-plugins = "1.0.23"
 sollecitom-swissknife = "1.0.12"
 kotlinx-coroutines = "1.11.0"
+palantir-git-plugin = "5.0.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 swissknife-test-utils = { module = "sollecitom.swissknife:test-utils", version.ref = "sollecitom-swissknife" }
 swissknife-core-test-utils = { module = "sollecitom.swissknife:core-test-utils", version.ref = "sollecitom-swissknife" }
+kotlin-compiler-embeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 
 [plugins]
+com-palantir-git-version = { id = "com.palantir.git-version", version.ref = "palantir-git-plugin" }
 sollecitom-kotlin-library-conventions = { id = "sollecitom.kotlin-library-conventions", version.ref = "sollecitom-gradle-plugins" }
+sollecitom-maven-publish-conventions = { id = "sollecitom.maven-publish-conventions", version.ref = "sollecitom-gradle-plugins" }
 sollecitom-aggregate-test-metrics-conventions = { id = "sollecitom.aggregate-test-metrics-conventions", version.ref = "sollecitom-gradle-plugins" }
+sollecitom-dependency-update-conventions = { id = "sollecitom.dependency-update-conventions", version.ref = "sollecitom-gradle-plugins" }
+sollecitom-publish-changed-conventions = { id = "sollecitom.publish-if-changed-conventions", version.ref = "sollecitom-gradle-plugins" }

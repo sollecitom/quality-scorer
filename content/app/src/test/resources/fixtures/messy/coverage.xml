@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.1//EN" "report.dtd">
+<report name="messy">
+  <counter type="INSTRUCTION" missed="70" covered="30"/>
+  <counter type="BRANCH" missed="20" covered="10"/>
+  <counter type="LINE" missed="45" covered="55"/>
+  <counter type="METHOD" missed="0" covered="1"/>
+  <counter type="CLASS" missed="0" covered="1"/>
+</report>
