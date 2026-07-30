@@ -15,7 +15,5 @@ kotlin-compiler-embeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-em
 [plugins]
 com-palantir-git-version = { id = "com.palantir.git-version", version.ref = "palantir-git-plugin" }
 sollecitom-kotlin-library-conventions = { id = "sollecitom.kotlin-library-conventions", version.ref = "sollecitom-gradle-plugins" }
-sollecitom-maven-publish-conventions = { id = "sollecitom.maven-publish-conventions", version.ref = "sollecitom-gradle-plugins" }
 sollecitom-aggregate-test-metrics-conventions = { id = "sollecitom.aggregate-test-metrics-conventions", version.ref = "sollecitom-gradle-plugins" }
 sollecitom-dependency-update-conventions = { id = "sollecitom.dependency-update-conventions", version.ref = "sollecitom-gradle-plugins" }
-sollecitom-publish-changed-conventions = { id = "sollecitom.publish-if-changed-conventions", version.ref = "sollecitom-gradle-plugins" }

@@ -32,9 +32,6 @@ update-internal-dependencies:
 rebuild:
     ./gradlew clean build --refresh-dependencies --rerun-tasks
 
-publish:
-    ./scripts/publish-if-changed.sh
-
 update-dependencies:
     ./gradlew versionCatalogUpdate
 
