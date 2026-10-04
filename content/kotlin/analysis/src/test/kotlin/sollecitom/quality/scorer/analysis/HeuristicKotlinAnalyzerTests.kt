@@ -68,6 +68,27 @@ class HeuristicKotlinAnalyzerTests {
     }
 
     @Test
+    fun `does not treat kotlin-test setup and teardown functions as tests`() {
+        val source = """
+            class FooTest {
+                @BeforeTest
+                fun setUp() {
+                }
+
+                @AfterTest fun tearDown() {
+                }
+
+                @ParameterizedTest
+                fun parameterised() {
+                }
+            }
+        """.trimIndent()
+        val file = analyzer.analyze("src/test/kotlin/FooTest.kt", source, isTestSource = true)
+
+        assertThat(file.functions.filter { it.isTest }.map { it.name }).containsExactlyInAnyOrder("parameterised")
+    }
+
+    @Test
     fun `measures block function length across lines`() {
         val source = buildString {
             appendLine("fun long() {")

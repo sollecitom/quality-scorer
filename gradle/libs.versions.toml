@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.4.20"
-sollecitom-gradle-plugins = "1.0.32"
-sollecitom-swissknife = "1.0.35"
+sollecitom-gradle-plugins = "1.0.33"
+sollecitom-swissknife = "1.0.36"
 kotlinx-coroutines = "1.11.0"
 palantir-git-plugin = "5.1.0"
 
@@ -10,7 +10,6 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 swissknife-test-utils = { module = "sollecitom.swissknife:test-utils", version.ref = "sollecitom-swissknife" }
 swissknife-core-test-utils = { module = "sollecitom.swissknife:core-test-utils", version.ref = "sollecitom-swissknife" }
-kotlin-compiler-embeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 
 [plugins]
 com-palantir-git-version = { id = "com.palantir.git-version", version.ref = "palantir-git-plugin" }

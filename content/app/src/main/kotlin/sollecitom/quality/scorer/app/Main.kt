@@ -14,8 +14,13 @@ fun main(args: Array<String>) {
         System.err.println("usage: quality-scorer --project <dir> [--coverage <kover.xml>] [--out <file>]")
         exitProcess(2)
     }
+    val projectDirectory = File(project)
+    if (!projectDirectory.isDirectory) {
+        System.err.println("--project is not a directory: $project")
+        exitProcess(2)
+    }
     val coverage = options["--coverage"]?.let(::File)
-    val report = runBlocking { Grader().grade(File(project), coverage) }
+    val report = runBlocking { Grader().grade(projectDirectory, coverage) }
     val json = report.toJson()
     val out = options["--out"]
     if (out != null) File(out).writeText(json) else println(json)

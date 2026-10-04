@@ -190,6 +190,6 @@ class HeuristicKotlinAnalyzer : KotlinSourceAnalyzer {
         val ASSERTION = Regex("""\bassert\w*\b|\bshouldBe\b|\bshouldNotBe\b|\bverify\s*\(|\bexpectThat\b|\bfail\s*\(""")
         val DECISION = Regex("""\bif\b|\bwhen\b|\bfor\b|\bwhile\b|\bcatch\b|&&|\|\||\?:""")
         val NON_PUBLIC = Regex("""\b(private|protected|internal)\b""")
-        val TEST_ANNOTATION = Regex("""@\w*Test\b""")
+        val TEST_ANNOTATION = Regex("""@(?!BeforeTest\b|AfterTest\b)\w*Test\b""")
     }
 }

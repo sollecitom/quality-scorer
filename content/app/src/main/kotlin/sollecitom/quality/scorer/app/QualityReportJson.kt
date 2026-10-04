@@ -29,7 +29,7 @@ private fun jsonString(value: String): String = buildString {
         '\n' -> append("\\n")
         '\r' -> append("\\r")
         '\t' -> append("\\t")
-        else -> append(c)
+        else -> if (c < ' ') append("\\u%04x".format(c.code)) else append(c)
     }
     append('"')
 }
