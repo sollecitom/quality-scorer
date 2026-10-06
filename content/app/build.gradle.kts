@@ -14,7 +14,7 @@ dependencies {
 }
 
 // The vendored grader artefact: a single runnable fat jar the task harness invokes offline.
-val fatJar by tasks.registering(Jar::class) {
+val fatJar = tasks.register<Jar>("fatJar") {
     archiveClassifier.set("all")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest { attributes["Main-Class"] = "sollecitom.quality.scorer.app.MainKt" }
