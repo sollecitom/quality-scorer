@@ -5,6 +5,7 @@ import sollecitom.quality.scorer.analysis.KotlinProjectLoader
 import sollecitom.quality.scorer.domain.QualityReport
 import sollecitom.quality.scorer.domain.ScoringProfile
 import sollecitom.quality.scorer.domain.WeightedRuleSetScorer
+import sollecitom.quality.scorer.model.InvalidInputException
 import sollecitom.quality.scorer.model.KotlinModel
 import java.io.File
 
@@ -16,7 +17,7 @@ class Grader(
     private val scorer = WeightedRuleSetScorer(profile)
 
     suspend fun grade(projectRoot: File, coverageReport: File? = null): QualityReport {
-        val coverage = coverageReport?.let { requireNotNull(KoverCoverageParser.parseFile(it)) { "cannot read coverage report: $it" } }
+        val coverage = coverageReport?.let { KoverCoverageParser.parseFile(it) ?: throw InvalidInputException("cannot read coverage report: $it") }
         val model = loader.load(projectRoot, coverage)
         return scorer(model)
     }

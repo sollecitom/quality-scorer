@@ -1,6 +1,7 @@
 package sollecitom.quality.scorer.app
 
 import kotlinx.coroutines.runBlocking
+import sollecitom.quality.scorer.model.InvalidInputException
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -23,7 +24,7 @@ fun main(args: Array<String>) {
     val coverage = options["--coverage"]?.let(::File)
     val report = try {
         runBlocking { Grader().grade(projectDirectory, coverage) }
-    } catch (error: IllegalArgumentException) {
+    } catch (error: InvalidInputException) {
         System.err.println(error.message)
         exitProcess(2)
     }

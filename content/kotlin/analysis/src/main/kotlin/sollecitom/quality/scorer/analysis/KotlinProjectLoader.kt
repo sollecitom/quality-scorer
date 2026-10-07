@@ -1,6 +1,7 @@
 package sollecitom.quality.scorer.analysis
 
 import sollecitom.quality.scorer.model.CoverageReport
+import sollecitom.quality.scorer.model.InvalidInputException
 import sollecitom.quality.scorer.model.KotlinModel
 import java.io.File
 
@@ -16,7 +17,7 @@ class KotlinProjectLoader(private val analyzer: KotlinSourceAnalyzer = Heuristic
                 analyzer.analyze(path = relative, source = file.readText(), isTestSource = isTestPath(relative))
             }
             .toList()
-        require(sourceFiles.isNotEmpty()) { "no Kotlin files in project: $projectRoot" }
+        if (sourceFiles.isEmpty()) throw InvalidInputException("no Kotlin files in project: $projectRoot")
         return KotlinModel(sourceFiles = sourceFiles, coverage = coverage)
     }
 
