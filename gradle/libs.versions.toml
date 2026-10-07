@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.4.20"
-sollecitom-gradle-plugins = "1.0.46"
+sollecitom-gradle-plugins = "1.0.47"
 sollecitom-swissknife = "1.0.60"
 kotlinx-coroutines = "1.11.0"
 palantir-git-plugin = "5.1.0"
