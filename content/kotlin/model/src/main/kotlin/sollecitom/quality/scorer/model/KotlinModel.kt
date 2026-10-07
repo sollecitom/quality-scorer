@@ -63,12 +63,11 @@ data class KotlinModel(
     /** A test is any function marked `@Test` (the analyzer sets [KotlinFunction.isTest]). */
     val testFunctions: List<KotlinFunction> get() = allFunctions.filter { it.isTest }
 
-    /** Production functions are the non-test functions in main (non-test) source sets. */
-    val productionFunctions: List<KotlinFunction> get() = sourceFiles.filterNot { it.isTestSource }.flatMap { it.functions }.filterNot { it.isTest }
+    val productionFunctions: List<KotlinFunction> get() = mainSourceFiles.flatMap { it.functions }.filterNot { it.isTest }
 
-    val publicApiFunctions: List<KotlinFunction>
-        get() = sourceFiles.filterNot { it.isTestSource }.flatMap { it.functions }.filter { it.isPublic && !it.isTest }
+    val publicApiFunctions: List<KotlinFunction> get() = productionFunctions.filter { it.isPublic }
 
-    val publicApiTypes: List<KotlinTypeDeclaration>
-        get() = sourceFiles.filterNot { it.isTestSource }.flatMap { it.types }.filter { it.isPublic }
+    val publicApiTypes: List<KotlinTypeDeclaration> get() = mainSourceFiles.flatMap { it.types }.filter { it.isPublic }
+
+    private val mainSourceFiles: List<KotlinSourceFile> get() = sourceFiles.filterNot { it.isTestSource }
 }

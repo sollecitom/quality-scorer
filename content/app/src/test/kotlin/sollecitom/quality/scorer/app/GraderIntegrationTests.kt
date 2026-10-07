@@ -5,14 +5,13 @@ import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isGreaterThan
 import assertk.assertions.isGreaterThanOrEqualTo
-import assertk.assertions.isFailure
-import assertk.assertions.isInstanceOf
 import assertk.assertions.isLessThan
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.io.TempDir
+import sollecitom.libs.swissknife.test.utils.assertions.failedThrowing
 import sollecitom.quality.scorer.domain.RuleId
 import sollecitom.quality.scorer.model.InvalidInputException
 import java.io.File
@@ -70,14 +69,23 @@ class GraderIntegrationTests {
 
         val result = runCatching { grader.grade(project) }
 
-        assertThat(result).isFailure().isInstanceOf<InvalidInputException>()
+        assertThat(result).failedThrowing<InvalidInputException>()
     }
 
     @Test
     fun `an unreadable coverage report is rejected`() = runTest {
         val result = runCatching { grader.grade(fixture("clean"), File(fixture("clean"), "missing.xml")) }
 
-        assertThat(result).isFailure().isInstanceOf<InvalidInputException>()
+        assertThat(result).failedThrowing<InvalidInputException>()
+    }
+
+    @Test
+    fun `an unparsable coverage report is rejected`(@TempDir directory: File) = runTest {
+        val report = File(directory, "kover.xml").apply { writeText("not a coverage report") }
+
+        val result = runCatching { grader.grade(fixture("clean"), report) }
+
+        assertThat(result).failedThrowing<InvalidInputException>()
     }
 
     @Test

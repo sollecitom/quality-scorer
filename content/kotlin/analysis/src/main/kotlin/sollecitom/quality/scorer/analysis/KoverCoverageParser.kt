@@ -4,6 +4,7 @@ import org.w3c.dom.Element
 import sollecitom.quality.scorer.model.CoverageReport
 import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.IOException
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
@@ -13,7 +14,7 @@ import javax.xml.parsers.DocumentBuilderFactory
  */
 object KoverCoverageParser {
 
-    fun parseFile(file: File): CoverageReport? = if (file.isFile) parse(file.readText()) else null
+    fun parseFile(file: File): CoverageReport? = file.takeIf { it.isFile }?.readTextOrNull()?.let(::parse)
 
     fun parse(xml: String): CoverageReport? {
         val root = try {
@@ -41,4 +42,10 @@ object KoverCoverageParser {
         val total = missed + covered
         return if (total == 0) 1.0 else covered.toDouble() / total
     }
+}
+
+private fun File.readTextOrNull(): String? = try {
+    readText()
+} catch (_: IOException) {
+    null
 }

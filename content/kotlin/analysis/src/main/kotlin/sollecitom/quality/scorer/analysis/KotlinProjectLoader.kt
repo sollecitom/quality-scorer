@@ -5,7 +5,7 @@ import sollecitom.quality.scorer.model.InvalidInputException
 import sollecitom.quality.scorer.model.KotlinModel
 import java.io.File
 
-/** Walks a project directory (skipping build output), analyzes every `.kt` file, and assembles a [KotlinModel]. Fails on a project without Kotlin files. */
+/** Walks a project directory, analyzes every `.kt` file, and assembles a [KotlinModel]. */
 class KotlinProjectLoader(private val analyzer: KotlinSourceAnalyzer = HeuristicKotlinAnalyzer()) {
 
     fun load(projectRoot: File, coverage: CoverageReport? = null): KotlinModel {

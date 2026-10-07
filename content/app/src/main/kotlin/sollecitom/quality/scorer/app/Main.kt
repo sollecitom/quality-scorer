@@ -7,8 +7,7 @@ import kotlin.system.exitProcess
 
 /**
  * CLI entry point: `quality-scorer --project <dir> [--coverage <kover.xml>] [--out <file>]`.
- * Prints (or writes) the reward JSON. Exit code 0 on success, 2 on a usage error (not a directory, no Kotlin files,
- * or an unreadable coverage report).
+ * Prints (or writes) the reward JSON. Exit code 0 on success, 2 on a usage error.
  */
 fun main(args: Array<String>) {
     val options = args.toList().zipWithNext().associate { it.first to it.second }
