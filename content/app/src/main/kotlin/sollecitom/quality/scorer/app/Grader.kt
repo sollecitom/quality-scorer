@@ -16,7 +16,7 @@ class Grader(
     private val scorer = WeightedRuleSetScorer(profile)
 
     suspend fun grade(projectRoot: File, coverageReport: File? = null): QualityReport {
-        val coverage = coverageReport?.let { KoverCoverageParser.parseFile(it) }
+        val coverage = coverageReport?.let { requireNotNull(KoverCoverageParser.parseFile(it)) { "cannot read coverage report: $it" } }
         val model = loader.load(projectRoot, coverage)
         return scorer(model)
     }

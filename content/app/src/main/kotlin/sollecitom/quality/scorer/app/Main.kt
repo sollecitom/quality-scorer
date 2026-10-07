@@ -6,7 +6,8 @@ import kotlin.system.exitProcess
 
 /**
  * CLI entry point: `quality-scorer --project <dir> [--coverage <kover.xml>] [--out <file>]`.
- * Prints (or writes) the reward JSON. Exit code 0 on success, 2 on a usage error.
+ * Prints (or writes) the reward JSON. Exit code 0 on success, 2 on a usage error (not a directory, no Kotlin files,
+ * or an unreadable coverage report).
  */
 fun main(args: Array<String>) {
     val options = args.toList().zipWithNext().associate { it.first to it.second }
@@ -20,7 +21,12 @@ fun main(args: Array<String>) {
         exitProcess(2)
     }
     val coverage = options["--coverage"]?.let(::File)
-    val report = runBlocking { Grader().grade(projectDirectory, coverage) }
+    val report = try {
+        runBlocking { Grader().grade(projectDirectory, coverage) }
+    } catch (error: IllegalArgumentException) {
+        System.err.println(error.message)
+        exitProcess(2)
+    }
     val json = report.toJson()
     val out = options["--out"]
     if (out != null) File(out).writeText(json) else println(json)

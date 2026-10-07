@@ -5,11 +5,14 @@ import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isGreaterThan
 import assertk.assertions.isGreaterThanOrEqualTo
+import assertk.assertions.isFailure
+import assertk.assertions.isInstanceOf
 import assertk.assertions.isLessThan
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.junit.jupiter.api.io.TempDir
 import sollecitom.quality.scorer.domain.RuleId
 import java.io.File
 
@@ -58,6 +61,32 @@ class GraderIntegrationTests {
         val json = grader.grade(fixture("clean"), coverage("clean")).toJson()
         assertThat(json).contains("\"reward\"")
         assertThat(json).contains("public-api-kdoc")
+    }
+
+    @Test
+    fun `a project without Kotlin files is rejected`(@TempDir project: File) = runTest {
+        File(project, "build/generated/Generated.kt").apply { parentFile.mkdirs() }.writeText("fun generated() = 1")
+
+        val result = runCatching { grader.grade(project) }
+
+        assertThat(result).isFailure().isInstanceOf<IllegalArgumentException>()
+    }
+
+    @Test
+    fun `an unreadable coverage report is rejected`() = runTest {
+        val result = runCatching { grader.grade(fixture("clean"), File(fixture("clean"), "missing.xml")) }
+
+        assertThat(result).isFailure().isInstanceOf<IllegalArgumentException>()
+    }
+
+    @Test
+    fun `helpers in any test source set don't count as production functions`(@TempDir project: File) = runTest {
+        File(project, "src/main/kotlin/Main.kt").apply { parentFile.mkdirs() }.writeText("/** Doc. */\nfun main() = Unit\n")
+        File(project, "src/testFixtures/kotlin/Fixtures.kt").apply { parentFile.mkdirs() }.writeText("fun longHelper() {\n" + "    println()\n".repeat(200) + "}\n")
+
+        val report = grader.grade(project)
+
+        assertThat(report.scoreOf("function-length")).isEqualTo(1.0)
     }
 
     private fun sollecitom.quality.scorer.domain.QualityReport.scoreOf(id: String) =
