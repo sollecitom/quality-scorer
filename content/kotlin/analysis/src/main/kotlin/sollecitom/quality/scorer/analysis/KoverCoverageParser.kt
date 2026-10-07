@@ -2,7 +2,6 @@ package sollecitom.quality.scorer.analysis
 
 import org.w3c.dom.Element
 import sollecitom.quality.scorer.model.CoverageReport
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
 import javax.xml.parsers.DocumentBuilderFactory
@@ -23,7 +22,7 @@ object KoverCoverageParser {
             runCatching { factory.setFeature("http://xml.org/sax/features/external-general-entities", false) }
             runCatching { factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false) }
             factory.isValidating = false
-            factory.newDocumentBuilder().parse(ByteArrayInputStream(xml.toByteArray())).documentElement
+            factory.newDocumentBuilder().parse(xml.byteInputStream()).documentElement
         } catch (_: Exception) {
             return null
         } ?: return null

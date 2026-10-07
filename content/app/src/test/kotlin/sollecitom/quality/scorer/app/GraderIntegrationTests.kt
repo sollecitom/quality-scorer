@@ -26,8 +26,8 @@ class GraderIntegrationTests {
 
     private val grader = Grader()
 
-    private fun fixture(name: String): File = File(javaClass.getResource("/fixtures/$name")!!.toURI())
-    private fun coverage(name: String): File = File(fixture(name), "coverage.xml")
+    private fun fixture(name: String): File = javaClass.getResource("/fixtures/$name")!!.toURI().let(::File)
+    private fun coverage(name: String): File = fixture(name).resolve("coverage.xml")
 
     @Test
     fun `a clean project scores much higher than a messy one`() = runTest {
@@ -65,7 +65,7 @@ class GraderIntegrationTests {
 
     @Test
     fun `a project without Kotlin files is rejected`(@TempDir project: File) = runTest {
-        File(project, "build/generated/Generated.kt").apply { parentFile.mkdirs() }.writeText("fun generated() = 1")
+        project.resolve("build/generated/Generated.kt").apply { parentFile.mkdirs() }.writeText("fun generated() = 1")
 
         val result = runCatching { grader.grade(project) }
 
@@ -74,14 +74,14 @@ class GraderIntegrationTests {
 
     @Test
     fun `an unreadable coverage report is rejected`() = runTest {
-        val result = runCatching { grader.grade(fixture("clean"), File(fixture("clean"), "missing.xml")) }
+        val result = runCatching { grader.grade(fixture("clean"), fixture("clean").resolve("missing.xml")) }
 
         assertThat(result).failedThrowing<InvalidInputException>()
     }
 
     @Test
     fun `an unparsable coverage report is rejected`(@TempDir directory: File) = runTest {
-        val report = File(directory, "kover.xml").apply { writeText("not a coverage report") }
+        val report = directory.resolve("kover.xml").apply { writeText("not a coverage report") }
 
         val result = runCatching { grader.grade(fixture("clean"), report) }
 
@@ -90,8 +90,8 @@ class GraderIntegrationTests {
 
     @Test
     fun `helpers in any test source set don't count as production functions`(@TempDir project: File) = runTest {
-        File(project, "src/main/kotlin/Main.kt").apply { parentFile.mkdirs() }.writeText("/** Doc. */\nfun main() = Unit\n")
-        File(project, "src/testFixtures/kotlin/Fixtures.kt").apply { parentFile.mkdirs() }.writeText("fun longHelper() {\n" + "    println()\n".repeat(200) + "}\n")
+        project.resolve("src/main/kotlin/Main.kt").apply { parentFile.mkdirs() }.writeText("/** Doc. */\nfun main() = Unit\n")
+        project.resolve("src/testFixtures/kotlin/Fixtures.kt").apply { parentFile.mkdirs() }.writeText("fun longHelper() {\n" + "    println()\n".repeat(200) + "}\n")
 
         val report = grader.grade(project)
 
